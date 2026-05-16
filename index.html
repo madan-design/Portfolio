@@ -4,289 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Madan Kumar S | AI/ML Developer</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-dark: #0a0a0a;
-            --bg-card: rgba(20, 20, 20, 0.6);
-            --accent: #00f5ff;
-            --accent-glow: rgba(0, 245, 255, 0.3);
-            --text: #e0e0e0;
-            --text-dim: #a0a0a0;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-dark);
-            color: var(--text);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        #particles-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .content {
-            position: relative;
-            z-index: 1;
-        }
-
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
-            z-index: 100;
-            border-bottom: 1px solid rgba(0, 245, 255, 0.1);
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        nav a {
-            color: var(--text);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        nav a:hover {
-            color: var(--accent);
-        }
-
-        section {
-            min-height: 100vh;
-            padding: 6rem 2rem 4rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s, transform 0.8s;
-        }
-
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .hero {
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--accent), #00a8ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero .subtitle {
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            color: var(--text-dim);
-            margin-bottom: 2rem;
-        }
-
-        .hero .cta {
-            display: inline-flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .btn {
-            padding: 0.8rem 2rem;
-            border: 2px solid var(--accent);
-            background: transparent;
-            color: var(--accent);
-            text-decoration: none;
-            border-radius: 5px;
-            transition: all 0.3s;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .btn:hover {
-            background: var(--accent);
-            color: var(--bg-dark);
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-
-        .btn-solid {
-            background: var(--accent);
-            color: var(--bg-dark);
-        }
-
-        .btn-solid:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 30px var(--accent-glow);
-        }
-
-        h2 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            margin-bottom: 3rem;
-            text-align: center;
-            color: var(--accent);
-        }
-
-        .container {
-            max-width: 1200px;
-            width: 100%;
-        }
-
-        .card {
-            background: var(--bg-card);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 245, 255, 0.2);
-            border-radius: 10px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 40px var(--accent-glow);
-        }
-
-        .card h3 {
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-            font-size: 1.5rem;
-        }
-
-        .card .meta {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .card ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .card li {
-            padding-left: 1.5rem;
-            position: relative;
-            margin-bottom: 0.5rem;
-        }
-
-        .card li:before {
-            content: "▹";
-            position: absolute;
-            left: 0;
-            color: var(--accent);
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .skill-category h4 {
-            color: var(--accent);
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .tag {
-            background: rgba(0, 245, 255, 0.1);
-            border: 1px solid var(--accent);
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: var(--text);
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .contact-links {
-            display: flex;
-            gap: 2rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 2rem;
-        }
-
-        .contact-links a {
-            color: var(--text);
-            text-decoration: none;
-            font-size: 1.1rem;
-            transition: color 0.3s;
-        }
-
-        .contact-links a:hover {
-            color: var(--accent);
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-dim);
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 768px) {
-            nav ul {
-                gap: 1rem;
-            }
-
-            section {
-                padding: 5rem 1rem 3rem;
-            }
-
-            .skills-grid, .projects-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <canvas id="particles-canvas"></canvas>
 
-    <nav>
+    <nav id="navbar">
         <ul>
             <li><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#experience">Experience</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#skills">Skills</a></li>
+            <li><a href="#resume">Resume</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
@@ -297,7 +27,7 @@
             <p class="subtitle">AI/ML Developer | Full-Stack Engineer | IEEE Researcher</p>
             <div class="cta">
                 <a href="#contact" class="btn btn-solid">Get In Touch</a>
-                <a href="https://github.com/madancodes09" target="_blank" class="btn">View GitHub</a>
+                <a href="https://github.com/madan-design" target="_blank" class="btn">View GitHub</a>
             </div>
         </section>
 
@@ -430,20 +160,73 @@
             </div>
         </section>
 
+        <section id="resume">
+            <div class="container">
+                <h2>Resume</h2>
+                <div class="card resume-card">
+                    <p style="font-size: 1.1rem; margin-bottom: 2rem; text-align: center;">
+                        Download my resume to learn more about my experience, projects, and achievements.
+                    </p>
+                    <div class="resume-actions">
+                        <a href="Madan_kumar_S_Resume__Copy_ (9).pdf" target="_blank" class="btn btn-solid">View Resume</a>
+                        <a href="Madan_kumar_S_Resume__Copy_ (9).pdf" download class="btn">Download Resume</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="contact">
             <div class="container">
                 <h2>Get In Touch</h2>
-                <div class="card" style="text-align: center;">
-                    <p style="font-size: 1.1rem; margin-bottom: 2rem;">
+                <div class="card contact-card">
+                    <p style="font-size: 1.1rem; margin-bottom: 2rem; text-align: center;">
                         I'm currently looking for SDE/Python Developer/AI Engineer opportunities. 
                         Let's connect and build something amazing together!
                     </p>
-                    <div class="contact-links">
-                        <a href="mailto:madancodes09@gmail.com">📧 Email</a>
-                        <a href="tel:+919043780890">📱 +91 9043780890</a>
-                        <a href="https://linkedin.com/in/madankumar" target="_blank">💼 LinkedIn</a>
-                        <a href="https://github.com/madancodes09" target="_blank">💻 GitHub</a>
-                        <a href="https://leetcode.com/madancodes09" target="_blank">🧩 LeetCode</a>
+                    
+                    <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="contactForm">
+                        <input type="hidden" name="access_key" value="eff19b7a-e655-4966-9b0a-29cdc96f84d5">
+                        <input type="hidden" name="subject" value="New Portfolio Contact from Madan Kumar S">
+                        <input type="hidden" name="from_name" value="Portfolio Contact Form">
+                        <input type="hidden" name="redirect" value="https://web3forms.com/success">
+                        <input type="email" name="_replyto" value="madancodes09@gmail.com" style="display:none;">
+                        <input type="hidden" name="_cc" value="madancodes09@gmail.com">
+                        
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" placeholder="Enter your name" required class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" name="message" placeholder="Enter your message" required class="form-control" rows="5"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-solid submit-btn">Send Message</button>
+                        <div id="form-status" class="form-status"></div>
+                    </form>
+
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <strong>Email:</strong> <a href="mailto:madancodes09@gmail.com">madancodes09@gmail.com</a>
+                        </div>
+                        <div class="contact-item">
+                            <strong>Phone:</strong> <a href="tel:+919043780890">+91 9043780890</a>
+                        </div>
+                        <div class="contact-item">
+                            <strong>Location:</strong> Chennai, India
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/madan-kumar-s-69b770329/" target="_blank" class="social-link">LinkedIn</a>
+                        <a href="https://github.com/madan-design" target="_blank" class="social-link">GitHub</a>
+                        <a href="https://leetcode.com/u/Madan_0910/" target="_blank" class="social-link">LeetCode</a>
                     </div>
                 </div>
             </div>
@@ -454,168 +237,6 @@
         <p>&copy; 2025 Madan Kumar S. Built with passion and particles.</p>
     </footer>
 
-    <script>
-        // Particle System with Ripple Effect
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let mouse = { x: null, y: null, radius: 150 };
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            init();
-        });
-
-        class Particle {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.baseX = x;
-                this.baseY = y;
-                this.size = Math.random() * 2 + 1;
-                this.density = Math.random() * 30 + 10;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-            }
-
-            draw() {
-                ctx.fillStyle = 'rgba(0, 245, 255, 0.8)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.closePath();
-                ctx.fill();
-            }
-
-            update() {
-                // Mouse interaction
-                let dx = mouse.x - this.x;
-                let dy = mouse.y - this.y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                let forceDirectionX = dx / distance;
-                let forceDirectionY = dy / distance;
-                let maxDistance = mouse.radius;
-                let force = (maxDistance - distance) / maxDistance;
-                let directionX = forceDirectionX * force * this.density;
-                let directionY = forceDirectionY * force * this.density;
-
-                if (distance < mouse.radius) {
-                    this.x -= directionX;
-                    this.y -= directionY;
-                } else {
-                    if (this.x !== this.baseX) {
-                        let dx = this.x - this.baseX;
-                        this.x -= dx / 10;
-                    }
-                    if (this.y !== this.baseY) {
-                        let dy = this.y - this.baseY;
-                        this.y -= dy / 10;
-                    }
-                }
-
-                // Gentle drift
-                this.baseX += this.speedX;
-                this.baseY += this.speedY;
-
-                // Wrap around edges
-                if (this.baseX < 0) this.baseX = canvas.width;
-                if (this.baseX > canvas.width) this.baseX = 0;
-                if (this.baseY < 0) this.baseY = canvas.height;
-                if (this.baseY > canvas.height) this.baseY = 0;
-            }
-        }
-
-        function init() {
-            particles = [];
-            let numberOfParticles = (canvas.width * canvas.height) / 15000;
-            for (let i = 0; i < numberOfParticles; i++) {
-                let x = Math.random() * canvas.width;
-                let y = Math.random() * canvas.height;
-                particles.push(new Particle(x, y));
-            }
-        }
-
-        function connect() {
-            for (let a = 0; a < particles.length; a++) {
-                for (let b = a; b < particles.length; b++) {
-                    let dx = particles[a].x - particles[b].x;
-                    let dy = particles[a].y - particles[b].y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 100) {
-                        ctx.strokeStyle = `rgba(0, 245, 255, ${1 - distance / 100})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[a].x, particles[a].y);
-                        ctx.lineTo(particles[b].x, particles[b].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-            }
-            connect();
-            requestAnimationFrame(animate);
-        }
-
-        init();
-        animate();
-
-        // Mouse move
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.x;
-            mouse.y = e.y;
-        });
-
-        window.addEventListener('mouseout', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
-
-        // Touch support
-        window.addEventListener('touchmove', (e) => {
-            mouse.x = e.touches[0].clientX;
-            mouse.y = e.touches[0].clientY;
-        });
-
-        window.addEventListener('touchend', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
-
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        // Scroll animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('section').forEach(section => {
-            observer.observe(section);
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
