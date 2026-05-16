@@ -1,8 +1,6 @@
-// Particle System with Ripple Effect
+// Premium Fluid Particle Effect - Ocean Theme
 const canvas = document.getElementById('particles-canvas');
-const ctx = canvas.getContext('2d');
-let particles = [];
-let mouse = { x: null, y: null, radius: 150 };
+const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -10,134 +8,287 @@ canvas.height = window.innerHeight;
 window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    init();
 });
 
-class Particle {
-    constructor(x, y) {
+// Smooth Fluid Particle
+class FluidParticle {
+    constructor(x, y, vx, vy) {
         this.x = x;
         this.y = y;
-        this.baseX = x;
-        this.baseY = y;
-        this.size = Math.random() * 2 + 1;
-        this.density = Math.random() * 30 + 10;
-        this.speedX = Math.random() * 0.5 - 0.25;
-        this.speedY = Math.random() * 0.5 - 0.25;
-        
-        // Use only cyan color for particles
-        this.color = 'rgba(0, 245, 255, 0.8)';
-    }
-
-    draw() {
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.closePath();
-        ctx.fill();
+        this.vx = vx + (Math.random() - 0.5) * 0.5;
+        this.vy = vy + (Math.random() - 0.5) * 0.5;
+        this.life = 1;
+        this.maxLife = 1;
+        this.size = Math.random() * 25 + 15;
+        this.baseSize = this.size;
+        this.hue = 180 + Math.random() * 20;
+        this.saturation = 100;
+        this.lightness = 50 + Math.random() * 30;
+        this.alpha = 0.8;
+        this.rotation = Math.random() * Math.PI * 2;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.08;
+        this.wave = Math.random() * Math.PI * 2;
+        this.waveSpeed = 0.15 + Math.random() * 0.1;
     }
 
     update() {
-        // Mouse interaction - ripple effect
-        let dx = mouse.x - this.x;
-        let dy = mouse.y - this.y;
-        let distance = Math.sqrt(dx * dx + dy * dy);
-        let forceDirectionX = dx / distance;
-        let forceDirectionY = dy / distance;
-        let maxDistance = mouse.radius;
-        let force = (maxDistance - distance) / maxDistance;
-        let directionX = forceDirectionX * force * this.density;
-        let directionY = forceDirectionY * force * this.density;
+        // Smooth deceleration
+        this.vx *= 0.95;
+        this.vy *= 0.95;
+        
+        // Gentle wave motion
+        this.wave += this.waveSpeed;
+        const waveX = Math.sin(this.wave) * 0.5;
+        const waveY = Math.cos(this.wave * 0.7) * 0.5;
+        
+        this.x += this.vx + waveX;
+        this.y += this.vy + waveY;
+        
+        // Smooth rotation
+        this.rotation += this.rotationSpeed;
+        
+        // Life decay
+        this.life -= 0.012;
+        
+        // Size pulsing
+        const pulse = Math.sin(this.wave * 2) * 0.15 + 0.85;
+        this.size = this.baseSize * pulse * (this.life * 0.5 + 0.5);
+        
+        // Brightness variation
+        this.lightness = 50 + Math.sin(this.wave * 1.5) * 20 + 10;
+    }
 
-        if (distance < mouse.radius) {
-            this.x -= directionX;
-            this.y -= directionY;
-        } else {
-            if (this.x !== this.baseX) {
-                let dx = this.x - this.baseX;
-                this.x -= dx / 10;
-            }
-            if (this.y !== this.baseY) {
-                let dy = this.y - this.baseY;
-                this.y -= dy / 10;
-            }
-        }
+    draw() {
+        if (this.life <= 0) return;
+        
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+        
+        const alpha = this.life * this.alpha;
+        
+        // Large soft glow
+        const outerGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * 2.5);
+        outerGradient.addColorStop(0, `hsla(${this.hue}, ${this.saturation}%, ${this.lightness + 20}%, ${alpha * 0.3})`);
+        outerGradient.addColorStop(0.5, `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, ${alpha * 0.15})`);
+        outerGradient.addColorStop(1, `hsla(${this.hue}, ${this.saturation}%, ${this.lightness - 10}%, 0)`);
+        
+        ctx.filter = `blur(${this.size * 0.8}px)`;
+        ctx.fillStyle = outerGradient;
+        ctx.fillRect(-this.size * 2.5, -this.size * 2.5, this.size * 5, this.size * 5);
+        
+        // Medium glow
+        const midGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * 1.2);
+        midGradient.addColorStop(0, `hsla(${this.hue}, ${this.saturation}%, ${this.lightness + 30}%, ${alpha * 0.6})`);
+        midGradient.addColorStop(0.6, `hsla(${this.hue}, ${this.saturation}%, ${this.lightness + 10}%, ${alpha * 0.3})`);
+        midGradient.addColorStop(1, `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, 0)`);
+        
+        ctx.filter = `blur(${this.size * 0.4}px)`;
+        ctx.fillStyle = midGradient;
+        ctx.fillRect(-this.size * 1.2, -this.size * 1.2, this.size * 2.4, this.size * 2.4);
+        
+        // Bright core
+        ctx.globalCompositeOperation = 'lighter';
+        const coreGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * 0.6);
+        coreGradient.addColorStop(0, `hsla(${this.hue}, 100%, 90%, ${alpha * 0.9})`);
+        coreGradient.addColorStop(0.5, `hsla(${this.hue}, 100%, ${this.lightness + 20}%, ${alpha * 0.5})`);
+        coreGradient.addColorStop(1, `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, 0)`);
+        
+        ctx.filter = `blur(${this.size * 0.15}px)`;
+        ctx.fillStyle = coreGradient;
+        ctx.fillRect(-this.size * 0.6, -this.size * 0.6, this.size * 1.2, this.size * 1.2);
+        
+        ctx.restore();
+    }
 
-        // Gentle drift
-        this.baseX += this.speedX;
-        this.baseY += this.speedY;
-
-        // Wrap around edges
-        if (this.baseX < 0) this.baseX = canvas.width;
-        if (this.baseX > canvas.width) this.baseX = 0;
-        if (this.baseY < 0) this.baseY = canvas.height;
-        if (this.baseY > canvas.height) this.baseY = 0;
+    isDead() {
+        return this.life <= 0;
     }
 }
 
-function init() {
-    particles = [];
-    let numberOfParticles = (canvas.width * canvas.height) / 15000;
-    for (let i = 0; i < numberOfParticles; i++) {
-        let x = Math.random() * canvas.width;
-        let y = Math.random() * canvas.height;
-        particles.push(new Particle(x, y));
+// Elegant Wave Ripple
+class WaveRipple {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.radius = 0;
+        this.maxRadius = 150;
+        this.life = 1;
+        this.speed = 6;
+    }
+
+    update() {
+        this.radius += this.speed;
+        this.life = 1 - (this.radius / this.maxRadius);
+        this.speed *= 0.97;
+    }
+
+    draw() {
+        if (this.life <= 0) return;
+        
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+        
+        // Outer wave
+        ctx.strokeStyle = `hsla(180, 100%, 70%, ${this.life * 0.25})`;
+        ctx.lineWidth = 3;
+        ctx.filter = 'blur(10px)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        // Main wave
+        ctx.strokeStyle = `hsla(180, 100%, 60%, ${this.life * 0.5})`;
+        ctx.lineWidth = 2;
+        ctx.filter = 'blur(4px)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        // Inner bright wave
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.strokeStyle = `hsla(180, 100%, 80%, ${this.life * 0.7})`;
+        ctx.lineWidth = 1;
+        ctx.filter = 'blur(2px)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius * 0.95, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        ctx.restore();
+    }
+
+    isDead() {
+        return this.life <= 0;
     }
 }
 
-function connect() {
-    for (let a = 0; a < particles.length; a++) {
-        for (let b = a; b < particles.length; b++) {
-            let dx = particles[a].x - particles[b].x;
-            let dy = particles[a].y - particles[b].y;
-            let distance = Math.sqrt(dx * dx + dy * dy);
+let particles = [];
+let ripples = [];
+let mouseX = canvas.width / 2;
+let mouseY = canvas.height / 2;
+let lastX = mouseX;
+let lastY = mouseY;
+let isMoving = false;
 
-            if (distance < 100) {
-                ctx.strokeStyle = `rgba(0, 245, 255, ${0.3 * (1 - distance / 100)})`;
-                ctx.lineWidth = 0.5;
-                ctx.beginPath();
-                ctx.moveTo(particles[a].x, particles[a].y);
-                ctx.lineTo(particles[b].x, particles[b].y);
-                ctx.stroke();
-            }
-        }
-    }
-}
-
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    for (let i = 0; i < particles.length; i++) {
-        particles[i].update();
-        particles[i].draw();
-    }
-    connect();
-    requestAnimationFrame(animate);
-}
-
-init();
-animate();
-
-// Mouse move
+// Smooth mouse tracking
 window.addEventListener('mousemove', (e) => {
-    mouse.x = e.x;
-    mouse.y = e.y;
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    isMoving = true;
+    
+    if (distance > 1) {
+        const speed = Math.min(distance * 0.15, 8);
+        const angle = Math.atan2(dy, dx);
+        
+        // Create smooth trail
+        const count = Math.ceil(distance / 10);
+        for (let i = 0; i < count; i++) {
+            const t = i / count;
+            const px = lastX + dx * t;
+            const py = lastY + dy * t;
+            const vx = Math.cos(angle) * speed;
+            const vy = Math.sin(angle) * speed;
+            
+            particles.push(new FluidParticle(px, py, vx, vy));
+        }
+        
+        lastX = e.clientX;
+        lastY = e.clientY;
+    }
 });
 
-window.addEventListener('mouseout', () => {
-    mouse.x = null;
-    mouse.y = null;
+// Click ripple
+window.addEventListener('click', (e) => {
+    ripples.push(new WaveRipple(e.clientX, e.clientY));
+    
+    // Radial burst
+    for (let i = 0; i < 16; i++) {
+        const angle = (Math.PI * 2 * i) / 16;
+        const speed = 3 + Math.random() * 2;
+        particles.push(new FluidParticle(
+            e.clientX,
+            e.clientY,
+            Math.cos(angle) * speed,
+            Math.sin(angle) * speed
+        ));
+    }
 });
 
 // Touch support
+let lastTouchX = 0;
+let lastTouchY = 0;
+
 window.addEventListener('touchmove', (e) => {
-    mouse.x = e.touches[0].clientX;
-    mouse.y = e.touches[0].clientY;
+    e.preventDefault();
+    const touch = e.touches[0];
+    const dx = touch.clientX - lastTouchX;
+    const dy = touch.clientY - lastTouchY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    if (distance > 1) {
+        const speed = Math.min(distance * 0.15, 8);
+        const angle = Math.atan2(dy, dx);
+        
+        const count = Math.ceil(distance / 10);
+        for (let i = 0; i < count; i++) {
+            const t = i / count;
+            const px = lastTouchX + dx * t;
+            const py = lastTouchY + dy * t;
+            const vx = Math.cos(angle) * speed;
+            const vy = Math.sin(angle) * speed;
+            
+            particles.push(new FluidParticle(px, py, vx, vy));
+        }
+        
+        lastTouchX = touch.clientX;
+        lastTouchY = touch.clientY;
+    }
+}, { passive: false });
+
+window.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    lastTouchX = touch.clientX;
+    lastTouchY = touch.clientY;
+    ripples.push(new WaveRipple(touch.clientX, touch.clientY));
 });
 
-window.addEventListener('touchend', () => {
-    mouse.x = null;
-    mouse.y = null;
-});
+// Optimized animation loop
+function animate() {
+    // Clear completely
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Update and draw ripples
+    for (let i = ripples.length - 1; i >= 0; i--) {
+        ripples[i].update();
+        ripples[i].draw();
+        if (ripples[i].isDead()) {
+            ripples.splice(i, 1);
+        }
+    }
+    
+    // Update and draw particles
+    for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        particles[i].draw();
+        if (particles[i].isDead()) {
+            particles.splice(i, 1);
+        }
+    }
+    
+    // Limit particles
+    if (particles.length > 100) {
+        particles.splice(0, particles.length - 100);
+    }
+    
+    requestAnimationFrame(animate);
+}
+
+animate();
 
 // Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -165,21 +316,16 @@ document.querySelectorAll('section').forEach(section => {
 
 // Navbar scroll effect
 const navbar = document.getElementById('navbar');
-let lastScroll = 0;
 
 window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    
-    if (currentScroll > 100) {
+    if (window.pageYOffset > 100) {
         navbar.classList.add('scrolled');
     } else {
         navbar.classList.remove('scrolled');
     }
-    
-    lastScroll = currentScroll;
 });
 
-// Contact Form Handling
+// Contact Form
 const contactForm = document.getElementById('contactForm');
 const formStatus = document.getElementById('form-status');
 
@@ -190,17 +336,12 @@ if (contactForm) {
         const submitBtn = contactForm.querySelector('.submit-btn');
         const originalText = submitBtn.textContent;
         
-        // Disable button and show loading
         submitBtn.disabled = true;
         submitBtn.textContent = 'Sending...';
         formStatus.style.display = 'none';
         
         try {
             const formData = new FormData(contactForm);
-            
-            // Ensure email is sent to madancodes09@gmail.com
-            formData.append('_to', 'madancodes09@gmail.com');
-            
             const response = await fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
                 body: formData
@@ -212,18 +353,11 @@ if (contactForm) {
                 formStatus.textContent = 'Message sent successfully! I\'ll get back to you soon.';
                 formStatus.className = 'form-status success';
                 contactForm.reset();
-                
-                // Add success animation
-                submitBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-                setTimeout(() => {
-                    submitBtn.style.background = '';
-                }, 2000);
             } else {
-                throw new Error(data.message || 'Form submission failed');
+                throw new Error(data.message || 'Failed');
             }
         } catch (error) {
-            console.error('Form submission error:', error);
-            formStatus.textContent = 'Oops! Something went wrong. Please try again or email me directly at madancodes09@gmail.com';
+            formStatus.textContent = 'Error! Please email me directly at madancodes09@gmail.com';
             formStatus.className = 'form-status error';
         } finally {
             submitBtn.disabled = false;
@@ -232,33 +366,17 @@ if (contactForm) {
     });
 }
 
-// Form input animations
-const formInputs = document.querySelectorAll('.form-control');
-formInputs.forEach(input => {
+// Form animations
+document.querySelectorAll('.form-control').forEach(input => {
     input.addEventListener('focus', function() {
         this.parentElement.style.transform = 'translateX(5px)';
-        this.parentElement.style.transition = 'transform 0.3s';
     });
-    
     input.addEventListener('blur', function() {
         this.parentElement.style.transform = 'translateX(0)';
     });
 });
 
-// Card hover effect enhancement
-const cards = document.querySelectorAll('.card');
-cards.forEach(card => {
-    card.addEventListener('mouseenter', function(e) {
-        const rect = this.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        this.style.setProperty('--mouse-x', `${x}px`);
-        this.style.setProperty('--mouse-y', `${y}px`);
-    });
-});
-
-// Skill tags animation on scroll
+// Skill tags animation
 const skillTags = document.querySelectorAll('.tag');
 const tagObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry, index) => {
@@ -278,7 +396,7 @@ skillTags.forEach(tag => {
     tagObserver.observe(tag);
 });
 
-// Project cards stagger animation
+// Project cards animation
 const projectCards = document.querySelectorAll('.projects-grid .card');
 const projectObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry, index) => {
@@ -298,7 +416,7 @@ projectCards.forEach(card => {
     projectObserver.observe(card);
 });
 
-// Typing effect for hero subtitle (optional enhancement)
+// Typing effect
 const subtitle = document.querySelector('.hero .subtitle');
 if (subtitle) {
     const text = subtitle.textContent;
@@ -313,28 +431,8 @@ if (subtitle) {
         }
     }
     
-    // Start typing after a short delay
     setTimeout(typeWriter, 500);
 }
 
-// Add cursor pointer effect on interactive elements
-document.querySelectorAll('.btn, .tag, .social-link, nav a').forEach(element => {
-    element.style.cursor = 'pointer';
-});
-
-// Parallax effect for sections
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const parallaxElements = document.querySelectorAll('.card');
-    
-    parallaxElements.forEach((element, index) => {
-        const speed = 0.5;
-        const yPos = -(scrolled * speed * 0.1);
-        element.style.transform = `translateY(${yPos}px)`;
-    });
-});
-
-// Console message for developers
-console.log('%c👋 Hey there, developer!', 'color: #00f5ff; font-size: 20px; font-weight: bold;');
-console.log('%cInterested in the code? Check out my GitHub!', 'color: #a855f7; font-size: 14px;');
-console.log('%chttps://github.com/madan-design', 'color: #3b82f6; font-size: 14px;');
+console.log('%c🌊 Ocean Portfolio', 'color: #00d4ff; font-size: 20px; font-weight: bold;');
+console.log('%chttps://github.com/madan-design', 'color: #06b6d4; font-size: 14px;');
