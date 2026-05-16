@@ -1,0 +1,58 @@
+Madan Kumar S
+(cid:131)9043780890 — #madancodes09@gmail.com — Chennai,India — (cid:239)LinkedIn — §GitHub — —LeetCode
+Summary
+B.TechAI&DataSciencestudent(8.1CGPA)withinternshipexperiencebuildingLLM-poweredapplications,RAGpipelines,MLmodels,and
+full-stacksystemsusingPython,FastAPI,andReact. BuiltAIsolutionsatIITMResearchParkforEVcharginganalyticsandpredictive
+monitoring. IEEE-publishedresearchertargetingSDE/PythonDeveloper/AIEngineerroles.
+Education
+B.TechinArtificialIntelligenceandDataScience 2023–Present
+RajalakshmiInstituteofTechnology 8.1CGPA
+HigherSecondarySchoolEducation 2021–2023
+LittleFlowerMatriculationHigherSecondarySchool 85.83%
+Experience
+AI/MLIntern–Plugzmart(MerasPluginsPvt. Ltd.) Oct2025–Jan2026
+IITMResearchPark Chennai,TamilNadu
+– DevelopedaRAG-basedchatbotusingLangChain+NeonDBtoqueryenergyconsumptiondatafromsmartmetersandIoTsensorsacross
+largecommercialbuildings,eliminatingmanualmeterreadingby100%.
+– TrainedanXGBoostclassifiertodetectfaultyrectifierswith91%F1-score,enablingpredictivemaintenanceacross200+EVchargersand
+reducingdowntimeby∼25%.
+– Builttime-seriesforecastingmodelsusingTimescaleDB+Scikit-learnforchargerdegradationprediction;developedLLM-powered
+monitoringpipelinesreducingmanualinspectioncyclesby∼30%
+ResearchContributor,EVResearchCenter Jan2024–Mar2024
+RajalakshmiInstituteofTechnology Chennai,TamilNadu
+– Builtareal-timeANPRsystemusingPython+OpenCV,achieving94%platerecognitionaccuracyacross100+vehicles/dayand
+eliminating∼2hrs/dayofmanualattendancelogging.
+Skills
+Languages&Frameworks: Python,JavaScript,HTML/CSS,Java|FastAPI,Flask,React,Flutter
+AI/ML/GenAI:TensorFlow,Scikit-learn,XGBoost,HuggingFace,LangChain,RAG,PromptEngineering,YOLOv8,EfficientDet,PatchCore,
+MediaPipe,OpenCV,GeminiAPI,Groq
+Data&Databases: Pandas,NumPy,SQL,PowerBI|PostgreSQL,SQLite,TimescaleDB,ChromaDB,NeonDB,Supabase
+Tools&Deployment: HuggingFacespaces,GoogleColab,Selenium,n8n,RESTAPIs,Git,GitHub,Vercel,Streamlit
+Projects
+SVJMWorkspace–IndustrialDigitalization&WorkflowPlatform 2025–2026
+Flutter,Supabase,PostgreSQL,GeminiAPI,PDFAutomation
+– Developedacross-platformindustrialworkflowplatformusingFlutter+Supabaseforquotationmanagement,projecttracking,and
+manufacturingcoordination.
+– Reducedquotationgenerationtimefrom15minto<3minusingGeminiAPIandautomatedPDFworkflowswhileimprovingcoordination
+efficiencyby∼70%.
+AutoAnnex–Annotation&DefectDetectionPlatform 2026
+Python(FastAPI),React,PyQt5,OpenCV,PatchCore,SQLite
+– Engineeredafull-stackannotationplatformwithauto-labelingpipelinesreducingmanualannotationby∼85%.
+– TrainedPatchCore-baseddefectdetectionmodelsforscratch/damagelocalizationandcentralizedexperimentationworkflows.
+FetchFluxAI(CopyrightReg. SW-39797/2025-CO) 2025
+Python(FastAPI),GeminiAPI,LLM,BeautifulSoup,Selenium
+– DesignedanLLM-poweredwebscrapingchatbotusingGeminiAPI+RAG-styleresponsegeneration,reducingmanualinformation
+retrievalby∼80%across50+dynamicwebsites.
+Real-TimeDualHandSignLanguageRecognition 2024
+Python,MediaPipe,OpenCV
+– Builtdual-handgesturerecognitionsystemusingMediaPipe+OpenCV;publishedatIEEEInternationalConferenceonAdvanced
+ComputingTechnologies2025.
+Certifications
+PythonforDataScience,AI&Development—IBMCoursera Jan2025
+SupervisedMachineLearning: RegressionandClassification—DeepLearning.AI Jan2025
+DatabasesandSQLforDataSciencewithPython—IBMCoursera Nov2024
+Achievements&Research
+– IEEEPublished(2025): First-authoredresearchpaperatIEEEInternationalConferenceonAdvancedComputingTechnologies.
+– ReceivedGovt. ofIndiasoftwarecopyrightregistration(SW-39797/2025-CO)fordevelopingtheAI-poweredplatform“FetchFluxAI.”
+Languages
+English—Tamil—Telugu
